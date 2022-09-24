@@ -1,6 +1,8 @@
 import React from 'react'
-// import './SignUp.css'
-import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import Select from './Select'
+
+
+import {Col, Container, Form, Row } from "react-bootstrap";
 
 function SignUp() {
   return (
@@ -20,42 +22,26 @@ function SignUp() {
                 <Form.Control type="password" placeholder="Password" />
               </Form.Group>
 
-               <fieldset class="row mb-3">
-    <legend class="col-form-label col-sm-10 pt-10">Options</legend>
-    <div class="col-sm-10">
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked />
-        <label class="form-check-label" for="gridRadios1">
-          Teacher SignUp
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2" />
-        <label class="form-check-label" for="gridRadios2">
-        Student SignUp
-        </label>
-      </div>
-       <div class="form-check">
-        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" />
-        <label class="form-check-label" for="gridRadios3">
-       
-             Guest signUp
-        </label>
-      </div>   
-    </div>
-                  
-  </fieldset>
-  <div class="row mb-3">
-    <div class="col-sm-10 offset-sm-2">
-  </div>
-  </div>
-       <Button variant="success btn-block" type="submit">
-   Sign Up
-      </Button>
-    </Form>
-   </Col>
-  </Row>
-</Container>
+
+
+              <div class="row mb-3">
+                <div class="col-sm-10 offset-sm-2">
+                </div>
+              </div>
+
+              <div class="d-grid gap-2 d-md-block">
+                <button class="btn btn-primary" type="button">Sign Up</button>
+                <Select />
+              </div>
+
+
+
+            </Form>
+          </Col>
+        </Row>
+      </Container>
+
+
     </>
   );
 };

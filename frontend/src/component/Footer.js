@@ -1,5 +1,7 @@
 import React from 'react'
 import './Footer.css'
+import { BsFacebook, BsGoogle, BsInstagram, BsTwitter } from "react-icons/bs";
+
 
 function Footer() {
   return (
@@ -10,17 +12,17 @@ function Footer() {
                         <div class="single_footer">
                             <h4>About Us</h4>
                             <ul>
-                                <li><a href="#">Overview</a></li>
+                                <li><a href="/Overview">Overview</a></li>
                                 <li><a href="#">Location, Maps and Direction</a></li>
-                                <li><a href="#">Contact Us</a></li>
+                                <li><a href="/ContactUs">Contact Us</a></li>
                             </ul>
                         </div>                   
                         <div class="social_profile">
                             <ul>
-                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fab fa-google-plus-g"></i></a></li>
-                                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                              <li><a href="https://web.facebook.com/our.sust/?_rdc=1&_rdr"><i class=""><BsFacebook /></i></a></li>
+                              <li><a href="https://www.sust.edu/"><i class="fab fa-twitter"><BsGoogle /></i></a></li>
+                              <li><a href="https://www.instagram.com/explore/tags/shahjalaluniversityofscienceandtechnology/?hl=bn"><i class="fab fa-google-plus-g"><BsInstagram /></i></a></li>
+                              <li><a href="#"><i class="fab fa-instagram"><BsTwitter /></i></a></li>
                             </ul>
                         </div>                          
                     </div>         

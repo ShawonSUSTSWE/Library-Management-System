@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-bootstrap'
+import Menu from './Menu.js'
 
 
 
@@ -8,8 +9,13 @@ const Navbar = () => {
     <div>
       <div><div class="collapse" id="navbarToggleExternalContent">
         <div class="bg-dark p-4">
-          <h5 class="text-white h4">Collapsed content</h5>
-          <span class="text-muted">Toggleable via the navbar brand.</span>
+          {/* <h5 class="text-white h4"><Drop_signup /></h5> */}
+          <li className="nav-item">
+            <NavLink className="nav-link " aria-current="nav-link"  >< Menu /></NavLink>
+           
+          </li>
+          
+          {/* <span class="text-muted">Toggleable via the navbar brand.</span> */}
         </div>
       </div>
         <nav class="navbar navbar-dark bg-dark">
@@ -37,9 +43,20 @@ const Navbar = () => {
               <li className="nav-item">
                 <NavLink className="nav-link " aria-current="nav-link" href="/login">Login</NavLink>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <NavLink className="nav-link " aria-current="nav-link" href="/signup">Signup</NavLink>
+
+        
+              </li> */}
+              <li className="nav-item">
+                <NavLink className="nav-link " aria-current="nav-link" href="/signup"> signUp</NavLink>
+
+
               </li>
+              
+
+             
+
              {/* <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Link
