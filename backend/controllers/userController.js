@@ -54,7 +54,7 @@ exports.getUser = (req, res, next) => {
 exports.logIn = (req, res, next) => {
   checker(validationResult(req));
   const { regNo, password } = req.body;
-  User.searchUserByID(email, (err, res_db) => {
+  User.searchUserByID(regNo, (err, res_db) => {
     if (err) {
       res.status(400).json({
         message: "Bad Request",
@@ -73,7 +73,7 @@ exports.logIn = (req, res, next) => {
         console.log(res_db);
         let token = jsonwebtoken.sign(
           {
-            userID: res_db.userID,
+            regNo: res_db.regNo,
             email: res_db.email,
             name: res_db.name,
           },
@@ -90,3 +90,5 @@ exports.logIn = (req, res, next) => {
     }
   });
 };
+
+exports.updateUser = (req, res, next) => {};
