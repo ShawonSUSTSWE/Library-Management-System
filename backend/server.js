@@ -14,7 +14,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
-//app.use("/api/", routes);
+app.use("/api/", routes);
 
 app.get("/", (req, res) => {
   res.send("Hello There! Welcome to our Library!!");

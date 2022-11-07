@@ -5,7 +5,7 @@ function defaultError(err) {
   console.log("Error: ", err);
 }
 
-class User {
+class Student {
   constructor(regNo, name, email, password, dept, picture) {
     this.regNo = regNo;
     this.name = name;
@@ -15,23 +15,27 @@ class User {
     this.picture = picture;
   }
 
-  static createUser(userData, result) {
-    bcrypt.hash(userData.password, 12).then((hash) => {
-      userData.password = hash;
-      dbConnection.query("INSERT INTO tbl_user SET ?", userData, (err, res) => {
-        if (err) {
-          defaultError(err);
-          result(err, null);
-        } else {
-          result(null, res);
+  static createStudent(studentData, result) {
+    bcrypt.hash(studentData.password, 12).then((hash) => {
+      studentData.password = hash;
+      dbConnection.query(
+        "INSERT INTO tbl_student SET ?",
+        studentData,
+        (err, res) => {
+          if (err) {
+            defaultError(err);
+            result(err, null);
+          } else {
+            result(null, res);
+          }
         }
-      });
+      );
     });
   }
 
-  static searchUserByID(regNo, result) {
+  static searchStudentByID(regNo, result) {
     dbConnection.query(
-      "SELECT * FROM tbl_user WHERE regNo = ?",
+      "SELECT * FROM tbl_student WHERE regNo = ?",
       regNo,
       (err, res) => {
         if (err) {
@@ -44,9 +48,9 @@ class User {
     );
   }
 
-  static searchUserByEmail(email, result) {
+  static searchStudentByEmail(email, result) {
     dbConnection.query(
-      "SELECT * FROM tbl_user WHERE email = ?",
+      "SELECT * FROM tbl_student WHERE email = ?",
       email,
       (err, res) => {
         if (err) {
@@ -59,8 +63,8 @@ class User {
     );
   }
 
-  static getUsers(result) {
-    dbConnection.query("SELECT * FROM tbl_user", (err, res) => {
+  static getStudents(result) {
+    dbConnection.query("SELECT * FROM tbl_student", (err, res) => {
       if (err) {
         defaultError(err);
         result(err, null);
@@ -70,15 +74,15 @@ class User {
     });
   }
 
-  static updateUser(userData, result) {
+  static updateStudent(studentData, result) {
     dbConnection.query(
-      "UPDATE tbl_user SET name = ?, password = ?, dept = ?, picture = ? WHERE regNo = ?",
+      "UPDATE tbl_student SET name = ?, password = ?, dept = ?, picture = ? WHERE regNo = ?",
       [
-        userData.name,
-        userData.password,
-        userData.dept,
-        userData.picture,
-        userData.regNo,
+        studentData.name,
+        studentData.password,
+        studentData.dept,
+        studentData.picture,
+        studentData.regNo,
       ],
       (err, res) => {
         if (err) {
@@ -92,4 +96,4 @@ class User {
   }
 }
 
-module.exports = User;
+module.exports = Student;

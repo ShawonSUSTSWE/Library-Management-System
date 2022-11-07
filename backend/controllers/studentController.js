@@ -1,21 +1,21 @@
 "use strict";
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("../models/userModel");
+const Student = require("../models/studentModel");
 
-exports.createUser = (req, res, next) => {
+exports.createStudent = (req, res, next) => {
   const { regNo, name, email, password, dept, picture } = req.body;
-  const user = new User(regNo, name, email, password, dept, picture);
-  User.createUser(user, (err, resultuser) => {
+  const student = new Student(regNo, name, email, password, dept, picture);
+  Student.createStudent(student, (err, resultstudent) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      console.log(resultuser);
-      let token = jsonwebtoken.sign(
+      console.log(resultstudent);
+      let token = jwt.sign(
         {
-          regNo: resultuser.regNo,
-          email: resultuser.email,
-          name: resultuser.name,
+          regNo: resultstudent.regNo,
+          email: resultstudent.email,
+          name: resultstudent.name,
         },
         process.env.JWT_KEY,
         {
@@ -30,23 +30,23 @@ exports.createUser = (req, res, next) => {
   });
 };
 
-exports.getUsers = (req, res, next) => {
-  User.getUsers((err, user) => {
+exports.getStudents = (req, res, next) => {
+  Student.getStudents((err, student) => {
     if (err) res.send(err);
-    console.log(user);
+    console.log(student);
     res.status(200).json({
       message: "Successfully fetched",
-      data: user,
+      data: student,
     });
   });
 };
 
-exports.getUser = (req, res, next) => {
-  User.searchUserByID(req.params.uuid, (err, user) => {
+exports.getStudent = (req, res, next) => {
+  Student.searchStudentByID(req.params.uuid, (err, student) => {
     if (err) {
       res.status(400).json(err);
     } else {
-      res.status(200).json(user);
+      res.status(200).json(student);
     }
   });
 };
@@ -54,7 +54,7 @@ exports.getUser = (req, res, next) => {
 exports.logIn = (req, res, next) => {
   checker(validationResult(req));
   const { regNo, password } = req.body;
-  User.searchUserByID(regNo, (err, res_db) => {
+  Student.searchStudentByID(regNo, (err, res_db) => {
     if (err) {
       res.status(400).json({
         message: "Bad Request",
@@ -91,4 +91,4 @@ exports.logIn = (req, res, next) => {
   });
 };
 
-exports.updateUser = (req, res, next) => {};
+exports.updateStudent = (req, res, next) => {};

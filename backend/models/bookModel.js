@@ -71,9 +71,9 @@ class Book {
     });
   }
 
-  static deleteBook(bookData, result) {
+  static deleteBook(accessionNo, result) {
     dbConnection.query("DELETE * FROM tbl_book WHERE accessionNo = ?"),
-      bookData,
+      accessionNo,
       (err, res) => {
         if (err) {
           result(err, null);
