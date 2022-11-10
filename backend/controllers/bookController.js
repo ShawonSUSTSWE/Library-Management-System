@@ -10,14 +10,14 @@ exports.addBook = (req, res, next) => {
     edition,
     volume,
     placeOfPub,
-    pub,
+    publisher,
     dateOfPub,
     source,
     binding,
     pagination,
     price,
     billNoDate,
-    isbn,
+    ISBN,
   } = req.body;
   const book = new Book(
     date,
@@ -27,14 +27,14 @@ exports.addBook = (req, res, next) => {
     edition,
     volume,
     placeOfPub,
-    pub,
+    publisher,
     dateOfPub,
     source,
     binding,
     pagination,
     price,
     billNoDate,
-    isbn
+    ISBN
   );
   Book.addBook(book, (err, result) => {
     if (err) {
@@ -84,9 +84,9 @@ exports.deleteBook = (req, res, next) => {
   const accessionNo = req.params.id;
   Book.deleteBook(accessionNo, (err, result) => {
     if (err) {
-      req.status(500).json(err);
+      res.status(500).json(err);
     } else {
-      req.status(200).json(result);
+      res.status(200).json(result);
     }
   });
 };

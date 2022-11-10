@@ -11,4 +11,6 @@ router.post("/login", studentController.logIn);
 
 router.put("/update", studentController.updateStudent);
 
+router.get("/:uuid", studentController.getStudent);
+
 module.exports = router;

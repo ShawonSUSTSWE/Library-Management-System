@@ -9,14 +9,14 @@ class Book {
     edition,
     volume,
     placeOfPub,
-    pub,
+    publisher,
     dateOfPub,
     source,
     binding,
     pagination,
     price,
     billNoDate,
-    isbn
+    ISBN
   ) {
     this.date = date;
     this.accessionNo = accessionNo;
@@ -25,14 +25,14 @@ class Book {
     this.edition = edition;
     this.volume = volume;
     this.placeOfPub = placeOfPub;
-    this.pub = pub;
+    this.publisher = publisher;
     this.dateOfPub = dateOfPub;
     this.source = source;
     this.binding = binding;
     this.pagination = pagination;
     this.price = price;
     this.billNoDate = billNoDate;
-    this.isbn = isbn;
+    this.ISBN = ISBN;
   }
 
   static addBook(bookData, result) {
@@ -47,18 +47,15 @@ class Book {
   }
 
   static searchBookByCriteria(criteria, value, result) {
-    dbConnection.query(
-      "SELECT * FROM tbl_book WHERE ? = ?",
-      criteria,
-      value,
-      (err, res) => {
-        if (err) {
-          result(err, null);
-        } else {
-          result(null, res);
-        }
+    console.log(criteria, value);
+    const query = `SELECT * FROM tbl_book WHERE ${criteria} = ?`;
+    dbConnection.query(query, value, (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
       }
-    );
+    });
   }
 
   static getBooks(result) {
@@ -72,7 +69,8 @@ class Book {
   }
 
   static deleteBook(accessionNo, result) {
-    dbConnection.query("DELETE * FROM tbl_book WHERE accessionNo = ?"),
+    dbConnection.query(
+      "DELETE FROM tbl_book WHERE accessionNo = ?",
       accessionNo,
       (err, res) => {
         if (err) {
@@ -80,7 +78,8 @@ class Book {
         } else {
           result(null, res);
         }
-      };
+      }
+    );
   }
 }
 

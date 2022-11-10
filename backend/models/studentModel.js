@@ -42,7 +42,8 @@ class Student {
           defaultError(err);
           result(err, null);
         } else {
-          result(null, res);
+          //console.log(res);
+          result(null, res[0]);
         }
       }
     );
