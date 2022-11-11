@@ -80,6 +80,28 @@ exports.searchBookByCriteria = (req, res, next) => {
   });
 };
 
+exports.borrowBook = (req, res, next) => {
+  const { regNo } = req.userData;
+  const accessionNo = req.params.id;
+  const { borrowDate, dueDate } = req.body;
+  const borrowData = {
+    regNo: regNo,
+    accessionNo: accessionNo,
+    borrowDate: borrowDate,
+    dueDate: dueDate,
+  };
+  Book.borrowBook(borrowData, (err, result) => {
+    if (err) {
+      res.status(500).json(err);
+    } else {
+      res.status(200).json({
+        message: "Book Borrowed Successfully",
+        result: result,
+      });
+    }
+  });
+};
+
 exports.deleteBook = (req, res, next) => {
   const accessionNo = req.params.id;
   Book.deleteBook(accessionNo, (err, result) => {

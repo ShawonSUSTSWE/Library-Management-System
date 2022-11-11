@@ -81,6 +81,20 @@ class Book {
       }
     );
   }
+
+  static borrowBook(borrowData, result) {
+    dbConnection.query(
+      "INSERT INTO tbl_borrow SET ?",
+      borrowData,
+      (err, res) => {
+        if (err) {
+          result(err, null);
+        } else {
+          result(null, res);
+        }
+      }
+    );
+  }
 }
 
 module.exports = Book;
