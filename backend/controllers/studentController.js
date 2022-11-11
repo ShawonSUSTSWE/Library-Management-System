@@ -92,6 +92,17 @@ exports.logIn = (req, res, next) => {
   });
 };
 
+exports.getBorrowedBooks = (req, res, next) => {
+  const { regNo } = req.userData;
+  Student.getBorrowedBooks(regNo, (error, result) => {
+    if (error) {
+      res.status(500).json(error);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+};
+
 exports.updateStudent = (req, res, next) => {
   let testPassed = false;
   const { regNo } = req.userData;

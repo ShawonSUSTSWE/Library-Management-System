@@ -75,6 +75,21 @@ class Student {
     });
   }
 
+  static getBorrowedBooks(regNo, result) {
+    const query = `SELECT tbl_book.accessionNo, tbl_book.title, tbl_book.author, tbl_book.coverpic 
+    FROM tbl_book 
+    JOIN tbl_borrow 
+    ON tbl_borrow.accessionNo = tbl_book.accessionNo 
+    WHERE tbl_borrow.regNo = ?`;
+    dbConnection.query(query, regNo, (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
+      }
+    });
+  }
+
   static updateStudent(studentData, result) {
     dbConnection.query(
       "UPDATE tbl_student SET name = ?, password = ?, dept = ?, picture = ? WHERE regNo = ?",
