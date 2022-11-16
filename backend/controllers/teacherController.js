@@ -54,7 +54,10 @@ exports.getTeacher = (req, res, next) => {
 
 exports.logIn = (req, res, next) => {
   //checker(validationResult(req));
+  co;
+  console.log(req.body);
   const { ID, password } = req.body;
+  console.log(req.body);
   Teacher.searchTeacherByID(ID, (err, res_db) => {
     if (err) {
       res.status(400).json({

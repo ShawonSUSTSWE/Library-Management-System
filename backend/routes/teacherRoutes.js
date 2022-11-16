@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const teacherController = require("../controllers/teacherController");
-const { authenticateTeacher } = require("../utils/authenticate.js");
+const { authenticate } = require("../utils/authenticate.js");
 
 router
   .route("/")
@@ -10,13 +10,9 @@ router
 
 router.post("/login", teacherController.logIn);
 
-router.put("/update", authenticateTeacher, teacherController.updateTeacher);
+router.put("/update", authenticate, teacherController.updateTeacher);
 
-router.get(
-  "/borrowedbooks",
-  authenticateTeacher,
-  teacherController.getBorrowedBooks
-);
+router.get("/borrowedbooks", authenticate, teacherController.getBorrowedBooks);
 
 router.get("/:uuid", teacherController.getTeacher);
 

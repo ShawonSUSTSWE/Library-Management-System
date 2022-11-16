@@ -35,6 +35,7 @@ class Teacher {
   }
 
   static searchTeacherByID(ID, result) {
+    //console.log(ID);
     dbConnection.query(
       "SELECT * FROM tbl_teacher WHERE ID = ?",
       ID,
@@ -43,7 +44,7 @@ class Teacher {
           defaultError(err);
           result(err, null);
         } else {
-          //console.log(res);
+          console.log(res);
           result(null, res[0]);
         }
       }

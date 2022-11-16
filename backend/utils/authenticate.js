@@ -5,9 +5,10 @@ exports.authenticate = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, process.env.JWT_KEY);
     req.userData = {
-      regNo: decodedToken.regNo,
+      ID: decodedToken.ID,
       email: decodedToken.email,
       name: decodedToken.name,
+      roleID: decodedToken.roleID,
     };
     next();
   } catch (err) {

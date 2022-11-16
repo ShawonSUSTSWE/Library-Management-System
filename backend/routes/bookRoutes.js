@@ -10,7 +10,7 @@ router.get("/search", bookController.searchBookByCriteria);
 router
   .route("/:id")
   .get(bookController.getBook)
-  .post(authenticate, bookController.borrowBook)
+  .post(authenticate, bookController.requestBook)
   .delete(bookController.deleteBook);
 
 module.exports = router;

@@ -82,18 +82,19 @@ class Book {
     );
   }
 
-  static borrowBook(borrowData, result) {
-    dbConnection.query(
-      "INSERT INTO tbl_borrow SET ?",
-      borrowData,
-      (err, res) => {
-        if (err) {
-          result(err, null);
-        } else {
-          result(null, res);
-        }
+  static requestBook(borrowData, person, result) {
+    let tableName = "tbl_request";
+    if (person === "teacher") {
+      tableName = "tbl_request_teacher";
+    }
+    const query = `INSERT INTO ${tableName} SET ?`;
+    dbConnection.query(query, borrowData, (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
       }
-    );
+    });
   }
 }
 

@@ -13,9 +13,10 @@ exports.createStudent = (req, res, next) => {
       console.log(resultstudent);
       let token = jwt.sign(
         {
-          regNo: resultstudent.regNo,
+          ID: resultstudent.regNo,
           email: resultstudent.email,
           name: resultstudent.name,
+          roleID: resultstudent.roleID,
         },
         process.env.JWT_KEY,
         {
@@ -53,6 +54,7 @@ exports.getStudent = (req, res, next) => {
 
 exports.logIn = (req, res, next) => {
   //checker(validationResult(req));
+  console.log(req.body);
   const { regNo, password } = req.body;
   Student.searchStudentByID(regNo, (err, res_db) => {
     if (err) {
@@ -74,9 +76,10 @@ exports.logIn = (req, res, next) => {
         console.log(res_db);
         let token = jwt.sign(
           {
-            regNo: res_db.regNo,
+            ID: res_db.regNo,
             email: res_db.email,
             name: res_db.name,
+            roleID: res_db.roleID,
           },
           process.env.JWT_KEY,
           {
@@ -105,7 +108,8 @@ exports.getBorrowedBooks = (req, res, next) => {
 
 exports.updateStudent = (req, res, next) => {
   let testPassed = false;
-  const { regNo } = req.userData;
+  console.log(req.userData);
+  const regNo = req.userData.ID;
   const { name, oldPassword, newPassword, picture } = req.body;
   Student.searchStudentByID(regNo, (err, student) => {
     if (err) {

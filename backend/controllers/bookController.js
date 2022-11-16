@@ -80,17 +80,34 @@ exports.searchBookByCriteria = (req, res, next) => {
   });
 };
 
-exports.borrowBook = (req, res, next) => {
-  const { regNo } = req.userData;
+exports.requestBook = (req, res, next) => {
+  let person = "student";
+  let regNo = 0;
+  let ID = 0;
+  if (req.userData.roleID === 1) {
+    regNo = req.userData.ID;
+  } else if (req.userData.roleID === 2) {
+    ID = req.userData.ID;
+    person = "teacher";
+  }
+  console.log(req.userData);
   const accessionNo = req.params.id;
-  const { borrowDate, dueDate } = req.body;
-  const borrowData = {
-    regNo: regNo,
-    accessionNo: accessionNo,
-    borrowDate: borrowDate,
-    dueDate: dueDate,
-  };
-  Book.borrowBook(borrowData, (err, result) => {
+  const { requestDate } = req.body;
+  let borrowData = {};
+  if (person === "student") {
+    borrowData = {
+      regNo: regNo,
+      accessionNo: accessionNo,
+      requestDate: requestDate,
+    };
+  } else {
+    borrowData = {
+      ID: ID,
+      accessionNo: accessionNo,
+      requestDate: requestDate,
+    };
+  }
+  Book.requestBook(borrowData, person, (err, result) => {
     if (err) {
       res.status(500).json(err);
     } else {
