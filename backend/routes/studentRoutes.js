@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const studentController = require("../controllers/studentController");
-const { authenticate } = require("../utils/authenticate.js");
+const { authenticateStudent } = require("../utils/authenticate.js");
 
 router
   .route("/")
@@ -10,9 +10,13 @@ router
 
 router.post("/login", studentController.logIn);
 
-router.put("/update", authenticate, studentController.updateStudent);
+router.put("/update", authenticateStudent, studentController.updateStudent);
 
-router.get("/borrowedbooks", authenticate, studentController.getBorrowedBooks);
+router.get(
+  "/borrowedbooks",
+  authenticateStudent,
+  studentController.getBorrowedBooks
+);
 
 router.get("/:uuid", studentController.getStudent);
 
