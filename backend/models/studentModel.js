@@ -13,7 +13,6 @@ class Student {
     this.password = password;
     this.dept = dept;
     this.picture = picture;
-    this.roleID = 1;
   }
 
   static createStudent(studentData, result) {

@@ -16,7 +16,6 @@ exports.createStudent = (req, res, next) => {
           regNo: resultstudent.regNo,
           email: resultstudent.email,
           name: resultstudent.name,
-          roleID: resultstudent.roleID,
         },
         process.env.JWT_KEY,
         {
@@ -78,7 +77,6 @@ exports.logIn = (req, res, next) => {
             regNo: res_db.regNo,
             email: res_db.email,
             name: res_db.name,
-            roleID: res_db.roleID,
           },
           process.env.JWT_KEY,
           {

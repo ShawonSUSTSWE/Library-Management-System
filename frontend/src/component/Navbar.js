@@ -1,7 +1,6 @@
 import React from "react";
 import { NavLink } from "react-bootstrap";
 import Menu from "./Menu.js";
-import New from "../src1/New.js";
 
 const Navbar = () => {
   return (
@@ -74,7 +73,7 @@ const Navbar = () => {
                 <NavLink
                   className="nav-link "
                   aria-current="nav-link"
-                  href="/new"
+                  href="/login"
                 >
                   Login
                 </NavLink>
@@ -110,7 +109,7 @@ const Navbar = () => {
                 <NavLink className="nav-link" href='/AboutUs'>About-Us</NavLink>
               </li> */}
             </ul>
-            {/* <div class="row">
+            <div class="row">
               <div class="col">
                 <div id="opac-main-search" class="mastheadsearch">
                   <form
@@ -169,8 +168,8 @@ const Navbar = () => {
                     <input type="hidden" name="weight_search" value="1" />
                   </form>
                 </div>
-              </div> */}
-            {/* </div> */}
+              </div>
+            </div>
           </div>
         </div>
       </nav>

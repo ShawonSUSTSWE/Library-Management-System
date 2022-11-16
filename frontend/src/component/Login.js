@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-// import { Link } from '  react-router-dom';
+import {Button, Col, Container, Form, Row} from "react-bootstrap";
 
 const LoginPage = () => {
     return (
@@ -20,10 +19,8 @@ const LoginPage = () => {
                                 <Form.Control type="password" placeholder="Password" />
                             </Form.Group>
                         
-                        <Button variant="success btn-block" type="submit">
-                            {/* <Link to = "/new"> */}
+                            <Button variant="success btn-block" type="submit">
                                 Login
-                            {/* </Link> */}
                             </Button>                   
                         </Form>
                     </Col>
