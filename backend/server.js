@@ -16,8 +16,8 @@ app.use(bodyParser.json());
 app.use(morgan("dev"));
 app.use("/api/", routes);
 
-app.get("/", (req, res) => {
-  res.send("Hello There! Welcome to our Library!!");
+app.use("*", (req, res) => {
+  res.send("Sorry!! No Such Routes Exist!");
 });
 
 app.listen(PORT, () => {

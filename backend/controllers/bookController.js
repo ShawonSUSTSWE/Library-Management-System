@@ -1,5 +1,6 @@
 "use strict";
 const Book = require("../models/bookModel");
+const { v4: uuidv4 } = require("uuid");
 
 exports.addBook = (req, res, next) => {
   const {
@@ -93,26 +94,29 @@ exports.requestBook = (req, res, next) => {
   console.log(req.userData);
   const accessionNo = req.params.id;
   const { requestDate } = req.body;
-  let borrowData = {};
+  let requestData = {};
+  const reqID = uuidv4();
   if (person === "student") {
-    borrowData = {
+    requestData = {
+      reqID: reqID,
       regNo: regNo,
       accessionNo: accessionNo,
       requestDate: requestDate,
     };
   } else {
-    borrowData = {
+    requestData = {
+      reqID: reqID,
       ID: ID,
       accessionNo: accessionNo,
       requestDate: requestDate,
     };
   }
-  Book.requestBook(borrowData, person, (err, result) => {
+  Book.requestBook(requestData, person, (err, result) => {
     if (err) {
       res.status(500).json(err);
     } else {
       res.status(200).json({
-        message: "Book Borrowed Successfully",
+        message: "Your Request has been placed Successfully",
         result: result,
       });
     }

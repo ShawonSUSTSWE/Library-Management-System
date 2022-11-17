@@ -82,13 +82,13 @@ class Book {
     );
   }
 
-  static requestBook(borrowData, person, result) {
+  static requestBook(requestData, person, result) {
     let tableName = "tbl_request";
     if (person === "teacher") {
       tableName = "tbl_request_teacher";
     }
     const query = `INSERT INTO ${tableName} SET ?`;
-    dbConnection.query(query, borrowData, (err, res) => {
+    dbConnection.query(query, requestData, (err, res) => {
       if (err) {
         result(err, null);
       } else {
