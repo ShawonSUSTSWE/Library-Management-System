@@ -18,10 +18,10 @@ router.put("/update", authenticate, studentController.updateStudent);
 
 router.get("/borrowedbooks", authenticate, studentController.getBorrowedBooks);
 
-router.get("/requests", librarianController.getAllRequests);
+router.get("/requests1", librarianController.getAllRequests);
 
 router
-  .route("/request/:id")
+  .route("/request1/:id")
   .get(authenticateLibrarian, librarianController.getRequest)
   .post(authenticateLibrarian, librarianController.acceptRequest)
   .delete(authenticateLibrarian, librarianController.rejectRequest);

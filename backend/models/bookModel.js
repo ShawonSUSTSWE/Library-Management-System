@@ -18,7 +18,7 @@ class Book {
     billNoDate,
     ISBN
   ) {
-    this.date = date;
+    this.date = new Date(date);
     this.accessionNo = accessionNo;
     this.author = author;
     this.title = title;

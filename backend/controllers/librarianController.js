@@ -5,7 +5,10 @@ const url = require("url");
 
 exports.getAllRequests = (req, res, next) => {
   let role = "student";
-  console.log(url.parse(req.url).pathname);
+  const path = req.path;
+  if (path.includes("teacher")) {
+    role = "teacher";
+  }
   Librarian.getRequest(role, (err, result) => {
     if (err) {
       res.status(404).json(err);

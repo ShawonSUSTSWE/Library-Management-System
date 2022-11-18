@@ -54,7 +54,6 @@ exports.getTeacher = (req, res, next) => {
 
 exports.logIn = (req, res, next) => {
   //checker(validationResult(req));
-  co;
   console.log(req.body);
   const { ID, password } = req.body;
   console.log(req.body);

@@ -54,6 +54,10 @@ exports.getBooks = (req, res, next) => {
     if (err) {
       res.status(500).json(err);
     } else {
+      // for (let i = 0; i < result.length; i++) {
+      //   const date = String(result[i].date);
+      //   result[i].date = date.slice(4, 15);
+      // }
       res.status(200).json(result);
     }
   });
