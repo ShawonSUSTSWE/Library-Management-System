@@ -3,11 +3,13 @@ const router = express.Router();
 const librarianController = require("../controllers/librarianController");
 const { authenticateLibrarian } = require("../utils/authenticate");
 
+router.post("/login", librarianController.logIn);
+
+router.use(authenticateLibrarian);
+
 router.get("/request/teachers", librarianController.getAllRequests);
 
 router.get("/request/students", librarianController.getAllRequests);
-
-router.use(authenticateLibrarian);
 
 router
   .route("/request/students/:id")

@@ -18,14 +18,6 @@ router.put("/update", authenticate, teacherController.updateTeacher);
 
 router.get("/borrowedbooks", authenticate, teacherController.getBorrowedBooks);
 
-router.get("/requests2", librarianController.getAllRequests);
-
-router
-  .route("/request2/:id")
-  .get(authenticateLibrarian, librarianController.getRequest)
-  .post(authenticateLibrarian, librarianController.acceptRequest)
-  .delete(authenticateLibrarian, librarianController.rejectRequest);
-
 router.get("/:uuid", teacherController.getTeacher);
 
 module.exports = router;
