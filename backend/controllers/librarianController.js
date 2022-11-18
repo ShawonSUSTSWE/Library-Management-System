@@ -4,11 +4,16 @@ const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 
-exports.getAllRequests = (req, res, next) => {
+function determineRole(req) {
   let role = "student";
   if (req.path.includes("teacher")) {
     role = "teacher";
   }
+  return role;
+}
+
+exports.getAllRequests = (req, res, next) => {
+  const role = determineRole(req);
   Librarian.getRequests(role, (err, result) => {
     if (err) {
       res.status(404).json(err);
@@ -20,10 +25,7 @@ exports.getAllRequests = (req, res, next) => {
 
 exports.getRequest = (req, res, next) => {
   const reqID = req.params.id;
-  let role = "student";
-  if (req.path.includes("teacher")) {
-    role = "teacher";
-  }
+  const role = determineRole(req);
   Librarian.getRequest(reqID, role, (err, result) => {
     if (err) {
       res.status(400).json(err);
@@ -72,6 +74,16 @@ exports.logIn = (req, res, next) => {
   });
 };
 
-exports.acceptRequest = (req, res, next) => {};
+exports.acceptRequest = (req, res, next) => {
+  const reqID = req.params.id;
+  const role = determineRole(req);
+  Librarian.acceptRequest(reqID, role, (err, result) => {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+};
 
 exports.rejectRequest = (req, res, next) => {};
