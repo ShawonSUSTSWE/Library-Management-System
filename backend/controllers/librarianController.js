@@ -86,4 +86,14 @@ exports.acceptRequest = (req, res, next) => {
   });
 };
 
-exports.rejectRequest = (req, res, next) => {};
+exports.rejectRequest = (req, res, next) => {
+  const reqID = req.params.id;
+  const role = determineRole(req);
+  Librarian.rejectRequest(reqID, role, (err, result) => {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+};

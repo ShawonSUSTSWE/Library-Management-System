@@ -95,7 +95,7 @@ exports.requestBook = (req, res, next) => {
     ID = req.userData.ID;
     person = "teacher";
   }
-  console.log(req.userData);
+  //console.log(req.userData);
   const accessionNo = req.params.id;
   const { requestDate } = req.body;
   let requestData = {};
@@ -119,10 +119,16 @@ exports.requestBook = (req, res, next) => {
     if (err) {
       res.status(500).json(err);
     } else {
-      res.status(200).json({
-        message: "Your Request has been placed Successfully",
-        result: result,
-      });
+      if (result) {
+        res.status(200).json({
+          message: "Your Request has been placed Successfully",
+          result: result,
+        });
+      } else {
+        res.status(400).json({
+          message: "Book is currently not available",
+        });
+      }
     }
   });
 };

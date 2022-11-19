@@ -55,12 +55,26 @@ class Librarian {
         const ts = Date.now();
         const currentDate = new Date(ts);
         const dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-        const issueData = {
-          regNo: res.regNo,
-          accessionNo: res.accessionNo,
-          issueDate: currentDate,
-          dueDate: dueDate,
-        };
+        const issueID = uuidv4();
+        console.log(res);
+        let issueData = {};
+        if (role === "teacher") {
+          issueData = {
+            issueID: issueID,
+            ID: res.ID,
+            accessionNo: res.accessionNo,
+            issueDate: currentDate,
+            dueDate: dueDate,
+          };
+        } else {
+          issueData = {
+            issueID: issueID,
+            regNo: res.regNo,
+            accessionNo: res.accessionNo,
+            issueDate: currentDate,
+            dueDate: dueDate,
+          };
+        }
         this.deleteRequest(reqID, role, (deleteError, deleteResponse) => {
           if (deleteError) {
             result(deleteError, null);
@@ -76,6 +90,22 @@ class Librarian {
                 }
               }
             );
+          }
+        });
+      }
+    });
+  }
+
+  static rejectRequest(reqID, role, result) {
+    this.getRequest(reqID, role, (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        this.deleteRequest(reqID, role, (deleteError, deleteResponse) => {
+          if (deleteError) {
+            result(deleteError, null);
+          } else {
+            result(null, deleteResponse);
           }
         });
       }

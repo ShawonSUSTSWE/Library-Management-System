@@ -1,5 +1,11 @@
 const dbConnection = require("../config/db.config");
 
+function selectTableName(role, tblType) {
+  let tableName = "tbl_" + tblType;
+  if (role === "teacher") tableName += "_teacher";
+  return tableName;
+}
+
 class Book {
   constructor(
     date,
@@ -82,17 +88,55 @@ class Book {
     );
   }
 
-  static requestBook(requestData, person, result) {
-    let tableName = "tbl_request";
-    if (person === "teacher") {
-      tableName = "tbl_request_teacher";
-    }
-    const query = `INSERT INTO ${tableName} SET ?`;
-    dbConnection.query(query, requestData, (err, res) => {
+  static requestBook(requestData, role, result) {
+    const tableName = selectTableName(role, "request");
+    this.checkBookAvailability(
+      requestData.accessionNo,
+      (searchError, searchResponse) => {
+        if (searchError) {
+          result(searchError, null);
+        } else {
+          if (Object.keys(searchResponse).length === 0) {
+            const query = `INSERT INTO ${tableName} SET ?`;
+            dbConnection.query(query, requestData, (err, res) => {
+              if (err) {
+                result(err, null);
+              } else {
+                result(null, res);
+              }
+            });
+          } else {
+            result(null, null);
+          }
+        }
+      }
+    );
+  }
+
+  static checkBookAvailability(accessionNo, result) {
+    let tableName = "tbl_borrow";
+    const query = `SELECT * FROM ${tableName} WHERE accessionNo = ? AND returnDate IS NULL`;
+    dbConnection.query(query, accessionNo, (err, res) => {
       if (err) {
         result(err, null);
       } else {
-        result(null, res);
+        if (Object.keys(res).length !== 0) {
+          result(null, res);
+        } else {
+          tableName += "_teacher";
+          const queryNext = `SELECT * FROM ${tableName} WHERE accessionNo = ? AND returnDate IS NULL`;
+          dbConnection.query(
+            queryNext,
+            accessionNo,
+            (errorNext, responseNext) => {
+              if (errorNext) {
+                result(errorNext, null);
+              } else {
+                result(null, responseNext);
+              }
+            }
+          );
+        }
       }
     });
   }
