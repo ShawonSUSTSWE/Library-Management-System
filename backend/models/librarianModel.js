@@ -149,6 +149,60 @@ class Librarian {
       }
     });
   }
+
+  static getExtensionRequest(issueID, result) {
+    dbConnection.query(
+      "SELECT * FROM tbl_request_extension WHERE issueID = ?",
+      issueID,
+      (err, res) => {
+        if (err) {
+          result(err, null);
+        } else {
+          result(null, res[0]);
+        }
+      }
+    );
+  }
+
+  static DateExtension(issueID, reqType, result) {
+    let message = "Error";
+    this.getExtensionRequest(issueID, (getError, getResponse) => {
+      if (getError) {
+        result(getError, null, message);
+      } else {
+        if (Object.keys(getResponse).length !== 0) {
+          const newDate = getResponse.dueDate;
+          console.log(newDate);
+          if (reqType === "accept") {
+            dbConnection.query(
+              "UPDATE tbl_borrow SET dueDate = ? WHERE issueID = ?",
+              [newDate, issueID],
+              (extensionError, extensionResponse) => {
+                if (extensionError) {
+                  result(extensionError, null, message);
+                }
+              }
+            );
+          }
+          dbConnection.query(
+            "DELETE FROM tbl_request_extension WHERE issueID = ?",
+            issueID,
+            (deleteError, deleteResponse) => {
+              if (deleteError) {
+                result(deleteError, null, message);
+              } else {
+                message = "Success";
+                result(null, deleteResponse, message);
+              }
+            }
+          );
+        } else {
+          message = "No Request";
+          result(null, null, message);
+        }
+      }
+    });
+  }
 }
 
 module.exports = Librarian;

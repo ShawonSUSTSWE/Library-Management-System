@@ -109,8 +109,41 @@ exports.getAllIssues = (req, res, next) => {
   });
 };
 
-exports.getSpecificRequest = (req, res, next) => {};
+exports.getExtensionRequest = (req, res, next) => {
+  const issueID = req.params.id;
+  Librarian.getExtensionRequest(issueID, (err, result) => {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+};
 
-exports.acceptDateExtension = (req, res, next) => {};
+exports.acceptDateExtension = (req, res, next) => {
+  const issueID = req.params.id;
+  Librarian.DateExtension(issueID, "accept", (err, result) => {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+};
 
-exports.rejectDateExtension = (req, res, next) => {};
+exports.rejectDateExtension = (req, res, next) => {
+  const issueID = req.params.id;
+  Librarian.DateExtension(issueID, "reject", (err, result, message) => {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      if (message === "Success") {
+        res.status(200).json(result);
+      } else {
+        res.status(404).json({
+          message: message,
+        });
+      }
+    }
+  });
+};

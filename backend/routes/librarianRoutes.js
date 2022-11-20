@@ -28,8 +28,8 @@ router.get("/issue/students", librarianController.getAllIssues);
 router.get("/issue/tecahers", librarianController.getAllIssues);
 
 router
-  .route("/issue/:id")
-  .get(librarianController.getSpecificRequest)
+  .route("/issue/students/:id")
+  .get(librarianController.getExtensionRequest)
   .post(librarianController.acceptDateExtension)
   .delete(librarianController.rejectDateExtension);
 
