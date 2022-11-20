@@ -171,7 +171,7 @@ class Librarian {
         result(getError, null, message);
       } else {
         if (Object.keys(getResponse).length !== 0) {
-          const newDate = getResponse.dueDate;
+          const newDate = getResponse.requestedDate;
           console.log(newDate);
           if (reqType === "accept") {
             dbConnection.query(

@@ -25,7 +25,7 @@ router
 
 router.get("/issue/students", librarianController.getAllIssues);
 
-router.get("/issue/tecahers", librarianController.getAllIssues);
+router.get("/issue/teachers", librarianController.getAllIssues);
 
 router
   .route("/issue/students/:id")
