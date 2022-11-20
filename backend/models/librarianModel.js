@@ -203,6 +203,24 @@ class Librarian {
       }
     });
   }
+
+  static returnBook(returnData, result) {
+    let message = "Error";
+    const tblName = selectTableName(returnData.role, "borrow");
+    const query = `UPDATE ${tblName} SET returnDate = ? WHERE issueID = ?`;
+    dbConnection.query(
+      query,
+      [returnData.returnDate, returnData.issueID],
+      (err, res) => {
+        if (err) {
+          result(err, null, message);
+        } else {
+          message = "Success";
+          result(null, res, message);
+        }
+      }
+    );
+  }
 }
 
 module.exports = Librarian;

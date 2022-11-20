@@ -147,3 +147,24 @@ exports.rejectDateExtension = (req, res, next) => {
     }
   });
 };
+
+exports.returnBook = (req, res, next) => {
+  const issueID = req.params.id;
+  const role = determineRole(req);
+  const returnDate = new Date(Date.now());
+  const returnData = {
+    issueID: issueID,
+    role: role,
+    returnDate: returnDate,
+  };
+  Librarian.returnBook(returnData, (err, result, message) => {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      res.status(200).json({
+        message: message,
+        data: result,
+      });
+    }
+  });
+};
