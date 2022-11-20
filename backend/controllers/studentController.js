@@ -96,7 +96,8 @@ exports.logIn = (req, res, next) => {
 };
 
 exports.getBorrowedBooks = (req, res, next) => {
-  const { regNo } = req.userData;
+  const regNo = req.userData.ID;
+  //console.log(regNo);
   Student.getBorrowedBooks(regNo, (error, result) => {
     if (error) {
       res.status(500).json(error);
@@ -158,3 +159,25 @@ exports.updateStudent = (req, res, next) => {
     }
   });
 };
+
+exports.requestDateExtension = (req, res, next) => {
+  const issueID = req.params.id;
+  Student.requestDateExtension(issueID, (err, result, message) => {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      if (message === "Success") {
+        res.status(200).json({
+          message: "Date extension request placed",
+          data: res[0],
+        });
+      } else {
+        res.status(400).json({
+          message: "Date cannot be extended now!",
+        });
+      }
+    }
+  });
+};
+
+exports.cancelRequest = (req, res, next) => {};

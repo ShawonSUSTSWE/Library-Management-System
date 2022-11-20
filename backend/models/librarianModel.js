@@ -52,46 +52,48 @@ class Librarian {
       if (err) {
         result(err, null);
       } else {
-        const ts = Date.now();
-        const currentDate = new Date(ts);
-        const dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-        const issueID = uuidv4();
-        console.log(res);
-        let issueData = {};
-        if (role === "teacher") {
-          issueData = {
-            issueID: issueID,
-            ID: res.ID,
-            accessionNo: res.accessionNo,
-            issueDate: currentDate,
-            dueDate: dueDate,
-          };
-        } else {
-          issueData = {
-            issueID: issueID,
-            regNo: res.regNo,
-            accessionNo: res.accessionNo,
-            issueDate: currentDate,
-            dueDate: dueDate,
-          };
-        }
-        this.deleteRequest(reqID, role, (deleteError, deleteResponse) => {
-          if (deleteError) {
-            result(deleteError, null);
+        if (Object.keys(res).length !== 0) {
+          const ts = Date.now();
+          const currentDate = new Date(ts);
+          const dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+          const issueID = uuidv4();
+          console.log(res);
+          let issueData = {};
+          if (role === "teacher") {
+            issueData = {
+              issueID: issueID,
+              ID: res.ID,
+              accessionNo: res.accessionNo,
+              issueDate: currentDate,
+              dueDate: dueDate,
+            };
           } else {
-            this.issueBook(
-              issueData,
-              role,
-              (insertionError, insertionResponse) => {
-                if (insertionError) {
-                  result(insertionError, null);
-                } else {
-                  result(null, insertionResponse);
-                }
-              }
-            );
+            issueData = {
+              issueID: issueID,
+              regNo: res.regNo,
+              accessionNo: res.accessionNo,
+              issueDate: currentDate,
+              dueDate: dueDate,
+            };
           }
-        });
+          this.deleteRequest(reqID, role, (deleteError, deleteResponse) => {
+            if (deleteError) {
+              result(deleteError, null);
+            } else {
+              this.issueBook(
+                issueData,
+                role,
+                (insertionError, insertionResponse) => {
+                  if (insertionError) {
+                    result(insertionError, null);
+                  } else {
+                    result(null, insertionResponse);
+                  }
+                }
+              );
+            }
+          });
+        }
       }
     });
   }
@@ -128,6 +130,18 @@ class Librarian {
     const tableName = selectTableName(role, "borrow");
     const query = `INSERT INTO ${tableName} SET ?`;
     dbConnection.query(query, issueData, (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
+      }
+    });
+  }
+
+  static getAllIssues(role, result) {
+    const tableName = selectTableName(role, "borrow");
+    const query = `SELECT * FROM ${tableName}`;
+    dbConnection.query(query, (err, res) => {
       if (err) {
         result(err, null);
       } else {

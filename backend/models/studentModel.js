@@ -77,11 +77,7 @@ class Student {
   }
 
   static getBorrowedBooks(regNo, result) {
-    const query = `SELECT tbl_book.accessionNo, tbl_book.title, tbl_book.author, tbl_book.coverpic 
-    FROM tbl_book 
-    JOIN tbl_borrow 
-    ON tbl_borrow.accessionNo = tbl_book.accessionNo 
-    WHERE tbl_borrow.regNo = ?`;
+    const query = `SELECT tbl_borrow.issueID, tbl_book.accessionNo, tbl_book.title, tbl_book.author, tbl_book.coverpic FROM tbl_book JOIN tbl_borrow ON tbl_borrow.accessionNo = tbl_book.accessionNo WHERE tbl_borrow.regNo = ?`;
     dbConnection.query(query, regNo, (err, res) => {
       if (err) {
         result(err, null);
@@ -107,6 +103,55 @@ class Student {
           result(err, null);
         } else {
           result(null, res);
+        }
+      }
+    );
+  }
+
+  static requestDateExtension(issueID, result) {
+    let message = "Error";
+    dbConnection.query(
+      "SELECT * FROM tbl_borrow WHERE issueID = ?",
+      issueID,
+      (err, res) => {
+        if (err) {
+          result(err, null, message);
+        } else {
+          console.log(Object.keys(res).length);
+          if (Object.keys(res[0]).length !== 0) {
+            //console.log("Hi");
+            const dueDate = res[0].dueDate;
+            //console.log(res[0].dueDate);
+            const ts = Date.now();
+            const currentDate = new Date(ts);
+            if (dueDate > currentDate) {
+              dueDate.setDate(dueDate.getDate() + 7);
+              const requestData = {
+                issueID: issueID,
+                regNo: res[0].regNo,
+                accessionNo: res[0].accessionNo,
+                requestedDate: dueDate,
+              };
+              console.log(requestData);
+              dbConnection.query(
+                "INSERT INTO tbl_request_extension SET ?",
+                requestData,
+                (insertionError, insertionResponse) => {
+                  if (insertionError) {
+                    result(insertionError, null, message);
+                  } else {
+                    message = "Success";
+                    result(null, insertionResponse, message);
+                  }
+                }
+              );
+            } else {
+              message = "Failure";
+              result(null, null, message);
+            }
+          } else {
+            result(null, null, message);
+          }
         }
       }
     );

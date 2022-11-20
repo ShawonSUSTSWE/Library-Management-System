@@ -18,6 +18,14 @@ router.put("/update", authenticate, studentController.updateStudent);
 
 router.get("/borrowedbooks", authenticate, studentController.getBorrowedBooks);
 
+router.route("/request/:id", authenticate, studentController.cancelRequest);
+
+router.post(
+  "/borrowedbooks/:id",
+  authenticate,
+  studentController.requestDateExtension
+);
+
 router.get("/:uuid", studentController.getStudent);
 
 module.exports = router;

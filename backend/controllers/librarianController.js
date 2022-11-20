@@ -97,3 +97,20 @@ exports.rejectRequest = (req, res, next) => {
     }
   });
 };
+
+exports.getAllIssues = (req, res, next) => {
+  const role = determineRole(req);
+  Librarian.getAllIssues(role, (err, result) => {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+};
+
+exports.getSpecificRequest = (req, res, next) => {};
+
+exports.acceptDateExtension = (req, res, next) => {};
+
+exports.rejectDateExtension = (req, res, next) => {};

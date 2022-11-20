@@ -23,4 +23,14 @@ router
   .post(librarianController.acceptRequest)
   .delete(librarianController.rejectRequest);
 
+router.get("/issue/students", librarianController.getAllIssues);
+
+router.get("/issue/tecahers", librarianController.getAllIssues);
+
+router
+  .route("/issue/:id")
+  .get(librarianController.getSpecificRequest)
+  .post(librarianController.acceptDateExtension)
+  .delete(librarianController.rejectDateExtension);
+
 module.exports = router;
