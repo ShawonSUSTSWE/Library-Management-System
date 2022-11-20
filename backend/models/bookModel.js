@@ -1,4 +1,5 @@
 const dbConnection = require("../config/db.config");
+const Student = require("./studentModel");
 
 function selectTableName(role, tblType) {
   let tableName = "tbl_" + tblType;
@@ -97,12 +98,40 @@ class Book {
           result(searchError, null);
         } else {
           if (Object.keys(searchResponse).length === 0) {
-            const query = `INSERT INTO ${tableName} SET ?`;
-            dbConnection.query(query, requestData, (err, res) => {
-              if (err) {
-                result(err, null);
+            let ID = 0;
+            if (role === "student") {
+              ID = requestData.regNo;
+            } else {
+              ID = requestData.ID;
+            }
+            this.checkIfAlreadyIssued(ID, role, (issueError, issueResponse) => {
+              if (issueError) {
+                result(issueError, null);
               } else {
-                result(null, res);
+                if (Object.keys(issueResponse).length === 0) {
+                  this.checkIfAlreadyRequested(
+                    ID,
+                    role,
+                    (requestError, requestResponse) => {
+                      if (requestError) {
+                        result(requestError, null);
+                      } else {
+                        if (Object.keys(requestResponse).length === 0) {
+                          const query = `INSERT INTO ${tableName} SET ?`;
+                          dbConnection.query(query, requestData, (err, res) => {
+                            if (err) {
+                              result(err, null);
+                            } else {
+                              result(null, res);
+                            }
+                          });
+                        } else {
+                          result(null, null);
+                        }
+                      }
+                    }
+                  );
+                }
               }
             });
           } else {
@@ -111,6 +140,38 @@ class Book {
         }
       }
     );
+  }
+
+  static checkIfAlreadyRequested(ID, role, result) {
+    let param1 = "regNo";
+    const tblName = selectTableName(role, "request");
+    if (role === "teacher") {
+      param1 = "ID";
+    }
+    const query = `SELECT * FROM ${tblName} WHERE ${param1} = ?`;
+    dbConnection.query(query, ID, (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
+      }
+    });
+  }
+
+  static checkIfAlreadyIssued(ID, role, result) {
+    let param1 = "regNo";
+    const tblName = selectTableName(role, "borrow");
+    if (role === "teacher") {
+      param1 = "ID";
+    }
+    const query = `SELECT * FROM ${tblName} WHERE ${param1} = ? AND returnDate IS NULL`;
+    dbConnection.query(query, ID, (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
+      }
+    });
   }
 
   static checkBookAvailability(accessionNo, result) {
