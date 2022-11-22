@@ -203,6 +203,82 @@ class Librarian {
       }
     });
   }
+
+  static getASpecificIssue(issueID, role, result) {
+    const tblName = selectTableName(role, "borrow");
+    const query = `SELECT * FROM ${tblName} WHERE issueID = ?`;
+    dbConnection.query(query, issueID, (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res[0]);
+      }
+    });
+  }
+
+  static calculateFine(returnData, result) {
+    const dueDate = returnData.dueDate;
+    const returnDate = returnData.returnDate;
+    const timePassed = dueDate - returnDate;
+    console.log(timePassed);
+    if (timePassed > 0) {
+      let fineData = {
+        issueID: returnData.issueID,
+        regNo: returnData.regNo,
+        amount: 50,
+      };
+      dbConnection.query("INSERT INTO tbl_fine SET ?", fineData, (err, res) => {
+        if (err) {
+          result(err, null);
+        } else {
+          result(null, res);
+        }
+      });
+    } else {
+      result(null, null);
+    }
+  }
+
+  static returnBook(returnData, result) {
+    let message = "Error";
+    const tblName = selectTableName(returnData.role, "borrow");
+    const query = `UPDATE ${tblName} SET returnDate = ? WHERE issueID = ?`;
+    dbConnection.query(
+      query,
+      [returnData.returnDate, returnData.issueID],
+      (err, res) => {
+        if (err) {
+          result(err, null, message);
+        } else {
+          if (returnData.role === "student") {
+            this.getASpecificIssue(
+              returnData.issueID,
+              returnData.role,
+              (searchError, searchResponse) => {
+                if (searchError) {
+                  result(searchError, null, message);
+                } else {
+                  this.calculateFine(
+                    searchResponse,
+                    (calculationError, calculationResponse) => {
+                      if (calculationError) {
+                        result(calculationError, null, message);
+                      } else if (calculationResponse) {
+                        message = "Pay Fine!";
+                        result(null, calculationResponse, message);
+                      }
+                    }
+                  );
+                }
+              }
+            );
+          }
+          message = "Success";
+          result(null, res, message);
+        }
+      }
+    );
+  }
 }
 
 module.exports = Librarian;

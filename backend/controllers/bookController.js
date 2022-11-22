@@ -97,7 +97,7 @@ exports.requestBook = (req, res, next) => {
   }
   //console.log(req.userData);
   const accessionNo = req.params.id;
-  const { requestDate } = req.body;
+  const requestDate = new Date(Date.now());
   let requestData = {};
   const reqID = uuidv4();
   if (person === "student") {
@@ -115,18 +115,18 @@ exports.requestBook = (req, res, next) => {
       requestDate: requestDate,
     };
   }
-  Book.requestBook(requestData, person, (err, result) => {
+  Book.requestBook(requestData, person, (err, result, message) => {
     if (err) {
       res.status(500).json(err);
     } else {
-      if (result) {
+      if (message === "Successful") {
         res.status(200).json({
-          message: "Your Request has been placed Successfully",
+          message: message,
           result: result,
         });
       } else {
         res.status(400).json({
-          message: "Book is currently not available",
+          message: message,
         });
       }
     }

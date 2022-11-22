@@ -89,53 +89,83 @@ class Book {
     );
   }
 
+  static checkifFined(regNo, result) {
+    const query =
+      "SELECT * FROM tbl_fine WHERE regNo = ? AND paymentDate IS NULL";
+    dbConnection.query(query, regNo, (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
+      }
+    });
+  }
+
   static requestBook(requestData, role, result) {
+    let message = "Error";
     const tableName = selectTableName(role, "request");
     this.checkBookAvailability(
       requestData.accessionNo,
       (searchError, searchResponse) => {
         if (searchError) {
-          result(searchError, null);
+          result(searchError, null, message);
         } else {
           if (Object.keys(searchResponse).length === 0) {
             let ID = 0;
             if (role === "student") {
               ID = requestData.regNo;
+              this.checkifFined(ID, (fineError, fineResponse) => {
+                if (fineError) {
+                  result(fineError, null, message);
+                } else {
+                  if (Object.keys(fineResponse).length !== 0) {
+                    message = "Pay Previous Fine";
+                    result(null, fineResponse, message);
+                  }
+                }
+              });
             } else {
               ID = requestData.ID;
             }
             this.checkIfAlreadyIssued(ID, role, (issueError, issueResponse) => {
               if (issueError) {
-                result(issueError, null);
+                result(issueError, null, message);
               } else {
+                console.log(issueResponse);
                 if (Object.keys(issueResponse).length === 0) {
                   this.checkIfAlreadyRequested(
                     ID,
                     role,
                     (requestError, requestResponse) => {
                       if (requestError) {
-                        result(requestError, null);
+                        result(requestError, null, message);
                       } else {
                         if (Object.keys(requestResponse).length === 0) {
                           const query = `INSERT INTO ${tableName} SET ?`;
                           dbConnection.query(query, requestData, (err, res) => {
                             if (err) {
-                              result(err, null);
+                              result(err, null, message);
                             } else {
-                              result(null, res);
+                              message = "Successful";
+                              result(null, res, message);
                             }
                           });
                         } else {
-                          result(null, null);
+                          message = "You already have a request";
+                          result(null, null, message);
                         }
                       }
                     }
                   );
+                } else {
+                  message = "Return Previous Book";
+                  result(null, null, message);
                 }
               }
             });
           } else {
-            result(null, null);
+            message = "No Book Found";
+            result(null, searchResponse, message);
           }
         }
       }

@@ -33,4 +33,7 @@ router
   .post(librarianController.acceptDateExtension)
   .delete(librarianController.rejectDateExtension);
 
+router.post("/return/issue/students/:id", librarianController.returnBook);
+router.post("/return/issue/teachers/:id", librarianController.returnBook);
+
 module.exports = router;
