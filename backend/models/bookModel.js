@@ -89,6 +89,18 @@ class Book {
     );
   }
 
+  static checkifFined(regNo, result) {
+    const query =
+      "SELECT * FROM tbl_fine WHERE regNo = ? AND paymentDate IS NULL";
+    dbConnection.query(query, regNo, (err, res) => {
+      if (err) {
+        result(err, null);
+      } else {
+        result(null, res);
+      }
+    });
+  }
+
   static requestBook(requestData, role, result) {
     let message = "Error";
     const tableName = selectTableName(role, "request");
@@ -102,6 +114,16 @@ class Book {
             let ID = 0;
             if (role === "student") {
               ID = requestData.regNo;
+              this.checkifFined(ID, (fineError, fineResponse) => {
+                if (fineError) {
+                  result(fineError, null, message);
+                } else {
+                  if (Object.keys(fineResponse).length !== 0) {
+                    message = "Pay Previous Fine";
+                    result(null, fineResponse, message);
+                  }
+                }
+              });
             } else {
               ID = requestData.ID;
             }
