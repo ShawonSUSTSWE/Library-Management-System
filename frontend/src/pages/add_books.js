@@ -70,7 +70,7 @@ export const Addbooks = () => {
                         <input type="text" class="form-control" value={Bookprice} onChange={(e) => setBookprice(e.target.value)} />
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Book Image</label>
+                        <label for="exampleInputPassword1" class="form-label">Book ISBN</label>
                         <input type="text" class="form-control" value={Bookimage} onChange={(e) => setBookimage(e.target.value)} />
                     </div>
                     <br />

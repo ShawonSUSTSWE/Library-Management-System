@@ -54,7 +54,7 @@ export const Issuebook = () => {
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label className="form-label">Book Image</label>
+                        <label className="form-label">Book ISBN</label>
                         <input type="text" class="form-control" id="exampleInputPassword1" value={bookimage} onChange={(e) => setbookimage(e.target.value)} />
                     </div>
                     <div class="mb-3">
