@@ -221,11 +221,11 @@ class Librarian {
     const returnDate = returnData.returnDate;
     const timePassed = dueDate - returnDate;
     console.log(timePassed);
-    if (timePassed > 0) {
+    if (timePassed < 0) {
       let fineData = {
         issueID: returnData.issueID,
         regNo: returnData.regNo,
-        amount: 50,
+        amount: 10,
       };
       dbConnection.query("INSERT INTO tbl_fine SET ?", fineData, (err, res) => {
         if (err) {
@@ -266,15 +266,19 @@ class Librarian {
                       } else if (calculationResponse) {
                         message = "Pay Fine!";
                         result(null, calculationResponse, message);
+                      } else {
+                        message = "Success";
+                        result(null, res, message);
                       }
                     }
                   );
                 }
               }
             );
+          } else {
+            message = "Success";
+            result(null, res, message);
           }
-          message = "Success";
-          result(null, res, message);
         }
       }
     );
